@@ -1,1 +1,26 @@
 // app global css in SCSS form
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+// :root {}
+
+body,
+html {
+  max-width: 1520px;
+  margin: 0 auto;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  scroll-behavior: smooth;
+}
+
+.text-pp-purple {
+  color: $pp-purple;
+}
+
+.text-pp-gray {
+  color: $pp-gray;
+}
+
+.bg-pp-gray-light {
+  background-color: $pp-gray-light;
+}
