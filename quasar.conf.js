@@ -22,11 +22,11 @@ module.exports = function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v1.quasar.dev/quasar-cli/boot-files
     boot: [
-      // 'server',
       {
         server: false, // run on client-side only!
         path: 'server' // references /src/boot/<name>.js
       },
+      'redirect',
     ],
 
     // https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -90,7 +90,14 @@ module.exports = function (/* ctx */) {
     framework: {
       iconSet: 'fontawesome-v6', // Quasar icon set
       lang: 'en-us', // Quasar language pack
-      config: {},
+      config: {
+        brand: {
+          'pp-gray': '#A2A7B7',
+          'pp-gray-light': '#FAFAFA',
+          'pp-purple': '#4E4BA6',
+          'pp-purple-light': '#4C49A4'
+        }
+      },
 
       // Possible values for "importStrategy":
       // * 'auto' - (DEFAULT) Auto-import needed Quasar components & directives

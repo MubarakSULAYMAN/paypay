@@ -1,12 +1,6 @@
 <template>
   <div id="q-app">
     <router-view />
-    <div style="background-color: red">
-      <h6>Users</h6>
-      <ul id="users">
-        <li v-for="user in users" v-bind:key="user.id">{{ user.name }}</li>
-      </ul>
-    </div>
   </div>
 </template>
 
