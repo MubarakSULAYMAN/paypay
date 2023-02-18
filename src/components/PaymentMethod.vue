@@ -2,7 +2,7 @@
   <section class="row wrap justify-between items-start content-center">
     <div class="payment-method col-12 col-md-6">
       <div
-        class="full-width row wrap justify-between items-start content-center"
+        class="payment-header row wrap justify-between items-start content-center"
       >
         <span class="text-weight-medium q-py-sm pp-item-title">
           Payment Method
@@ -70,21 +70,21 @@
             <div>
               <span class="q-mr-xs text-pp-gray">Account Name:</span>
               <span class="text-weight-medium">
-                {{ accountDetails.accountName }}
+                {{ accountDetails?.accountName }}
               </span>
             </div>
 
             <div>
               <span class="q-mr-xs text-pp-gray">Account Number:</span>
               <span class="text-weight-medium">
-                {{ addSpaceToText(accountDetails.accountNumber) }}
+                {{ addSpaceToText(accountDetails?.accountNumber) }}
               </span>
             </div>
 
             <div>
               <span class="q-mr-xs text-pp-gray">Account Name:</span>
               <span class="text-weight-medium">
-                {{ accountDetails.routingNumber }}
+                {{ accountDetails?.routingNumber }}
               </span>
             </div>
           </q-card-section>
@@ -136,59 +136,62 @@ export default {
       type: Number,
       default: 0,
     },
-
-    total: {
-      type: Number,
-      default: 0,
-    },
   },
 
   data() {
     return {
       dialogOpen: false,
 
-      paymentOptions: [
-        { color: "info", iconRight: "fa-brands fa-paypal", label: "Paypal" },
-        {
-          color: "negative",
-          iconRight: "fa-brands fa-google-pay",
-          label: "Google Pay",
-        },
-        {
-          color: "dark",
-          iconRight: "fa-brands fa-apple-pay",
-          label: "Apple Pay",
-        },
-        {
-          color: "warning",
-          iconRight: "fa-brands fa-amazon-pay",
-          label: "Amazon Pay",
-        },
-        {
-          color: "positive",
-          iconRight: "fa-solid fa-money-bill",
-          label: "Cash",
-        },
-      ],
+      paymentOptions: [],
 
       selectedPaymentOption: "Google Pay",
 
-      accountDetails: {
-        accountName: "Barly Vallendito",
-        accountNumber: "9700002342002900",
-        routingNumber: "084009519",
-      },
+      accountDetails: undefined,
 
-      availableDiscount: this.formatCurrency(0),
+      userDiscount: 0,
     };
   },
 
   computed: {
     selectedIcon() {
-      return this.paymentOptions.find(
+      return this.paymentOptions?.find(
         (option) => option.label === this.selectedPaymentOption
-      ).iconRight;
+      )?.iconRight;
     },
+
+    availableDiscount() {
+      return this.formatCurrency(
+        this.userDiscount > 0
+          ? Number(`-${this.userDiscount}`)
+          : this.userDiscount
+      );
+    },
+
+    total() {
+      return this.formatCurrency(
+        Number(this.subTotal) - Number(this.userDiscount) + Number(this.tax)
+      );
+    },
+  },
+
+  created() {
+    fetch("/api/resources/payment-options")
+      .then((res) => res.json())
+      .then((jsonRes) => {
+        this.paymentOptions = jsonRes;
+      });
+
+    fetch("/api/user/misc")
+      .then((res) => res.json())
+      .then((jsonRes) => {
+        this.userDiscount = jsonRes.discount;
+      });
+
+    fetch("/api/user/payment/card/details")
+      .then((res) => res.json())
+      .then((jsonRes) => {
+        this.accountDetails = jsonRes;
+      });
   },
 
   methods: {
@@ -197,7 +200,7 @@ export default {
     },
 
     addSpaceToText(text) {
-      return text.replace(/.{4}/g, "$& ").trim();
+      return text?.replace(/.{4}/g, "$& ").trim();
     },
 
     formatCurrency(
@@ -236,6 +239,12 @@ export default {
 @media screen and (max-width: 420px) {
   .payment-summary-card {
     width: 286px;
+  }
+}
+
+@media screen and (min-width: 720px) {
+  .payment-header {
+    width: 420px;
   }
 }
 </style>

@@ -6,11 +6,11 @@
           <img src="/images/logo.jpg" alt="" class="user-avatar q-mr-md" />
           <div class="row">
             <div class="username col-12 text-black text-weight-medium">
-              {{ customerdetails.user.name }}
+              {{ name }}
             </div>
             <Address>
               <div class="user-email col-12 text-pp-gray">
-                {{ customerdetails.user.email }}
+                {{ email }}
               </div>
             </Address>
           </div>
@@ -18,20 +18,16 @@
       </div>
       <div class="col-xs-12 col-md-4 text-pp-gray">
         <Address>
-          <div>{{ customerdetails.address.houseAddress }}</div>
+          <div>{{ address?.houseAddress }}</div>
         </Address>
         <Address>
           <div>
-            {{
-              `${customerdetails.address.city}, ${customerdetails.address.postCode}`
-            }}
+            {{ `${address?.city}, ${address?.postCode}` }}
           </div>
         </Address>
         <Address>
           <div>
-            {{
-              `${customerdetails.address.state}, ${customerdetails.address.country}`
-            }}
+            {{ `${address?.state}, ${address?.country}` }}
           </div>
         </Address>
       </div>
@@ -42,28 +38,28 @@
     >
       <div class="col-12 col-md-8">
         <div class="text-weight-medium">Invoice Number</div>
-        <div>{{ invoiceDetails.invoiceNumber }}</div>
+        <div>{{ invoiceDetails?.invoiceNumber }}</div>
         <div>
           <span class="q-mr-sm text-weight-light">Issued Date:</span>
-          <span>{{ invoiceDetails.issuedDate }}</span>
+          <span>{{ invoiceDetails?.issuedDate }}</span>
         </div>
         <div>
           <span class="q-mr-sm text-weight-light">Due Date:</span>
-          <span>{{ invoiceDetails.dueDate }}</span>
+          <span>{{ invoiceDetails?.dueDate }}</span>
         </div>
       </div>
       <div class="col-12 col-md-2 q-mt-md q-mt-md-none">
         <div class="text-weight-medium">Billed to</div>
         <div class="text-weight-light">
-          {{ invoiceDetails.billingAddress.name }}
+          {{ invoiceDetails?.billingAddress?.name }}
         </div>
         <Address class="text-weight-light">
-          <div>{{ invoiceDetails.billingAddress.address }}</div>
+          <div>{{ invoiceDetails?.billingAddress?.address }}</div>
         </Address>
         <Address class="text-weight-light">
           <div>
             {{
-              `${invoiceDetails.billingAddress.city}, ${invoiceDetails.billingAddress.country}`
+              `${invoiceDetails?.billingAddress?.city}, ${invoiceDetails?.billingAddress?.country}`
             }}
           </div>
         </Address>
@@ -90,50 +86,47 @@ export default {
 
   data() {
     return {
-      customerdetails: {
-        user: {
-          name: "Dipa Inhouse",
-          email: "hello@dipainhouse.com",
-        },
+      name: "",
+      email: "",
 
-        address: {
-          houseAddress: "Ijen Boulevard Street 101",
-          city: "Malang City",
-          postCode: "65115",
-          state: "East Java",
-          country: "Indonesia",
-        },
-      },
+      address: undefined,
 
-      invoiceDetails: {
-        invoiceNumber: "INV-2022-010",
-        issuedDate: "11 Jan 2022",
-        dueDate: "18 Jan 2022",
-
-        billingAddress: {
-          name: "Zaky Grizzly",
-          address: "Monlight Agency LTD",
-          city: "New York",
-          country: "USA",
-        },
-      },
+      invoiceDetails: undefined,
 
       tax: 0,
       lineTotal: 0,
     };
   },
 
-  computed: {
-    breadcrumbs() {
-      return [
-        { text: "Invoices", link: "/app/invoices" },
-        { text: `edit invoice(${this.invoiceDetails.invoiceNumber})` },
-      ];
+  watch: {
+    invoiceDetails: {
+      handler(newValue, oldValue) {
+        const breadcrumbs = [
+          { text: "Invoices", link: "/app/invoices" },
+          { text: `edit invoice(${newValue?.invoiceNumber})` },
+        ];
+
+        this.$store.dispatch("breadcrumbs/updateBreadCrumbs", breadcrumbs);
+      },
+
+      deep: true,
     },
   },
 
   created() {
-    this.$store.dispatch("breadcrumbs/updateBreadCrumbs", this.breadcrumbs);
+    fetch("/api/user/profile")
+      .then((res) => res.json())
+      .then((jsonRes) => {
+        this.name = jsonRes.name;
+        this.email = jsonRes.email;
+        this.address = jsonRes.address;
+      });
+
+    fetch("/api/user/payment/invoice-details")
+      .then((res) => res.json())
+      .then((jsonRes) => {
+        this.invoiceDetails = jsonRes;
+      });
   },
 
   methods: {

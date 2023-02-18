@@ -119,7 +119,6 @@ export default {
   watch: {
     invoiceItem: {
       handler(newValue, oldValue) {
-        console.log(newValue.tax);
         this.$emit("updateInvoiceRecord", newValue);
       },
 
