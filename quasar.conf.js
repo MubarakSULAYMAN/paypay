@@ -27,6 +27,7 @@ module.exports = function (/* ctx */) {
         path: 'server' // references /src/boot/<name>.js
       },
       'redirect',
+      'helpers',
     ],
 
     // https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -94,8 +95,10 @@ module.exports = function (/* ctx */) {
         brand: {
           'pp-gray': '#A2A7B7',
           'pp-gray-light': '#FAFAFA',
+          'pp-gray-fade': '#e8e8e8',
           'pp-purple': '#4E4BA6',
-          'pp-purple-light': '#4C49A4'
+          'pp-purple-light': '#4C49A4',
+          'pp-purple-fade': '#e3e1f1'
         }
       },
 
