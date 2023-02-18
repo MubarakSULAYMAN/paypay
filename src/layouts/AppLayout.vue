@@ -4,7 +4,7 @@
       <q-toolbar>
         <q-btn
           align="around"
-          class="btn-fixed-width q-mr-lg text-pp-purple text-h6 text-weight-bolder"
+          class="btn-fixed-width q-mx-xs q-ma-md-lg text-pp-purple text-h6 text-weight-bolder"
           label="Paypay."
           no-caps
           flat
@@ -23,23 +23,23 @@
             v-bind="tab"
             no-caps
             active-class="paypay-active-route"
-            class="route-tab q-px-sm q-py-md"
+            class="route-tab q-px-xs q-py-sm q-px-md-sm q-py-md-md"
           />
         </q-tabs>
       </q-toolbar>
     </q-header>
 
     <q-page-container class="bg-pp-gray-light" style="background-color: $pp-gray-light;">
-      <q-page class="q-px-xl q-py-md">
+      <q-page class="q-px-sm q-py-xs q-px-md-xl q-py-md-md">
         <q-toolbar
-          class="breadcrumb-toolbar q-mb-md text-pp-gray"
+          class="breadcrumb-toolbar q-mb-sm q-mb-md-md text-pp-gray"
           shrink
           style="border !important: 1px solid blue;"
         >
           <q-breadcrumbs
             align="left"
             active-color="text-pp-purple"
-            class="text-weight-bold"
+            class="text-weight-medium"
           >
             <q-breadcrumbs-el
               :label="breadcrumb.text"
@@ -54,7 +54,7 @@
             />
           </q-breadcrumbs>
         </q-toolbar>
-        <q-card-section class="app-content bg-white" style="border-radius: 20px">
+        <q-card-section class="app-content q-pa-sm q-pa-md-lg bg-white">
           <router-view />
         </q-card-section>
       </q-page>
@@ -123,6 +123,10 @@ export default {
         color: $pp-purple;
       }
     }
+  }
+
+  .app-content {
+    border-radius: 16px;
   }
 }
 </style>
