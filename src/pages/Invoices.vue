@@ -70,9 +70,9 @@
       </div>
     </section>
 
-    <InvoiceItem />
+    <InvoiceItem @updateInvoiceRecord="updateInvoiceRecord($event)" />
 
-    <PaymentMethod />
+    <PaymentMethod :tax="tax" :sub-total="lineTotal" />
   </div>
 </template>
 
@@ -117,6 +117,9 @@ export default {
           country: "USA",
         },
       },
+
+      tax: 0,
+      lineTotal: 0,
     };
   },
 
@@ -132,12 +135,18 @@ export default {
   created() {
     this.$store.dispatch("breadcrumbs/updateBreadCrumbs", this.breadcrumbs);
   },
+
+  methods: {
+    updateInvoiceRecord(val) {
+      this.tax = val.tax;
+      this.lineTotal = val.lineTotal;
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .invoice-view {
-
   .user-avatar {
     width: 60px;
     height: 60px;

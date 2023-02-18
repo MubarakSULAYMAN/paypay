@@ -32,80 +32,56 @@
       <div class="table-body">
         <div class="row full-width q-py-sm">
           <q-input
-            v-model="rowItem.name"
+            v-model="invoiceItem.name"
             placeholder="Description"
             filled
             round
             dense
-            :rules="[
-              (val) =>
-                val.length <= 3 || 'Please describe 3 or more characters',
-            ]"
             class="table-input item-name"
           />
 
           <q-input
-            v-model.number="rowItem.duration"
+            v-model.number="invoiceItem.duration"
             type="number"
             min="0"
             filled
             round
             dense
-            :rules="[
-              (val, rules) =>
-                (rules.number(val) && val >= 0) ||
-                'Please enter a valid number',
-            ]"
             class="table-input hours"
           />
 
           <q-input
             outlined
-            v-model.number="rowItem.rate"
+            v-model.number="invoiceItem.rate"
             placeholder="0"
             type="number"
             min="0"
             prefix="$"
             round
             dense
-            :rules="[
-              (val, rules) =>
-                (rules.number(val) && val >= 0) ||
-                'Please enter a valid number',
-            ]"
             class="table-input rate"
           />
 
           <q-input
             outlined
-            v-model.number="rowItem.tax"
+            v-model.number="invoiceItem.tax"
             placeholder="0"
             type="number"
             min="0"
             prefix="$"
             round
             dense
-            :rules="[
-              (val, rules) =>
-                (rules.number(val) && val >= 0) ||
-                'Please enter a valid number',
-            ]"
             class="table-input tax"
           />
 
           <q-input
             outlined
-            v-model.number="rowItem.lineTotal"
+            v-model.number="invoiceItem.lineTotal"
             type="number"
             min="0"
             prefix="$"
             round
             dense
-            :rules="[
-              (val, rules) =>
-                (rules.number(val) && val >= 0) ||
-                'Please enter a valid number',
-            ]"
             class="table-input line-total"
           />
 
@@ -115,7 +91,7 @@
               color="pp-purple"
               icon="fa-solid fa-plus"
               class="add-item"
-              @click="addRowItem"
+              @click="addInvoiceItem"
             />
           </div>
         </div>
@@ -130,7 +106,7 @@ export default {
 
   data() {
     return {
-      rowItem: {
+      invoiceItem: {
         name: "",
         duration: 0,
         rate: 0,
@@ -140,8 +116,19 @@ export default {
     };
   },
 
+  watch: {
+    invoiceItem: {
+      handler(newValue, oldValue) {
+        console.log(newValue.tax);
+        this.$emit("updateInvoiceRecord", newValue);
+      },
+
+      deep: true,
+    },
+  },
+
   methods: {
-    addRowItem() {
+    addInvoiceItem() {
       alert("Function not clearly stated");
     },
   },
@@ -150,13 +137,11 @@ export default {
 
 <style lang="scss" scoped>
 .invoice-item {
-
   .customize {
     border-radius: 5px;
   }
 
   .table-item {
-
     .table-header {
       border-top: 1px solid $pp-gray-fade;
       border-bottom: 1px solid $pp-gray-fade;
