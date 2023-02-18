@@ -101,13 +101,13 @@
       <div class="row wrap justify-between items-start content-center">
         <span class="text-pp-gray">Discount</span>
         <span class="text-weight-medium">
-          {{ appValues.availableDiscount }}
+          {{ availableDiscount }}
         </span>
       </div>
 
       <div class="row wrap justify-between items-start content-center">
         <span class="text-pp-gray">Total tax</span>
-        <span class="text-weight-medium">{{ appValues.totalTax }} </span>
+        <span class="text-weight-medium">{{ formatCurrency(tax) }} </span>
       </div>
 
       <div
@@ -127,6 +127,11 @@ export default {
   name: "PaymentMethod",
 
   props: {
+    tax: {
+      type: Number,
+      default: 0,
+    },
+
     subTotal: {
       type: Number,
       default: 0,
@@ -174,10 +179,7 @@ export default {
         routingNumber: "084009519",
       },
 
-      appValues: {
-        availableDiscount: this.formatCurrency(0),
-        totalTax: this.formatCurrency(0),
-      },
+      availableDiscount: this.formatCurrency(0),
     };
   },
 
